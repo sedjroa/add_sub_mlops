@@ -1,10 +1,19 @@
 from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 from fastapi import FastAPI, Response
 import uvicorn
+import logging
 from typing import Any
 
 # App creation
 app = FastAPI(title="Calculatrice Monitorée")
+
+# Logging configuration
+logging.basicConfig(
+    filename="calc_app.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 # Metrics creation: Total number of operation
 calc_counter = Counter('calc_ops_total',
@@ -24,6 +33,7 @@ async def add(a: float, b: float) -> dict[str, Any]:
     :return: Un dictionnaire contenant les opérandes, le nom de l'action et le résultat
     :rtype: dict[str, float]
     """
+    logger.info(f"User asked addition of a={a} and b={b}")
 
     calc_counter.labels(operation_type="addition").inc()
     result = {"operation":"addition",
@@ -46,6 +56,7 @@ async def sub(a: float, b: float) -> dict[str, Any]:
     :return: Un dictionnaire contenant les opérandes, le nom de l'action et le résultat
     :rtype: dict[str, float]
     """
+    logger.info(f"User asked substration between a={a} and b={b}")
 
     calc_counter.labels(operation_type="substraction").inc()
     result = {"operation":"substraction",
@@ -64,6 +75,8 @@ async def metric() -> str:
     :return: Retruns a string of total number of operation
     :rtype: str
     """
+    logger.info("Metric visits by user")
+
     return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 # Main
