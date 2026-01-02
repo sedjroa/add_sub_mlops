@@ -24,5 +24,8 @@ ie `soustraction`:  http://127.0.0.1:8000/sub?a=1&b=3 --> A-B=-2
 ## Suivi interations 
 
 - Télécharger [Prometheus](https://prometheus.io/download/)
-- Lancer le .exe depuis votre terminal: `.\prometheus.exe --config.file="chemin\vers\prometheus.yml"`
-- 
+- Lancer le .exe depuis votre terminal: `.\chemin\vers\prometheus.exe --config.file="chemin\vers\prometheus.yml"`
+- Interface Prometheus : http://localhost:9090/targets
+- Visualiser le flux (nombre total d'opérations): http://localhost:9090/graph
+
+![alt text](image.png)
