@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s     # Prometheus récupère les données toutes les 5 secondes
+  evaluation_interval: 5s  # Évaluation des règles d'alerte
+  external_labels:
+    monitor: 'calculatrice-monitor'
+    env: 'developpement'
+
+# Liste des points de collecte (Scrape Configs)
+scrape_configs:
+  # 1. Surveiller l'API FastAPI
+  - job_name: 'fastapi_backend'
+    metrics_path: '/metrics'  # L'endpoint 
+    static_configs:
+      - targets: [localhost:8000] #['host.docker.internal:8000'] # 'localhost:8000' si pas de Docker
+        labels:
+          app: 'calculatrice'
+          version: '1.0.0'
+
+  # 2. S'auto-surveiller (Prometheus se surveille lui-même)
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
